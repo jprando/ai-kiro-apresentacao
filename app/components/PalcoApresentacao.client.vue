@@ -119,7 +119,7 @@ function aoInicializarPalco() {
     >
       <Background :gap="26" pattern-color="#26304d" />
       <Controls position="bottom-left" />
-      <MiniMap pannable zoomable />
+      <!-- <MiniMap pannable zoomable /> -->
     </VueFlow>
 
     <!-- Barra de progresso fina no topo (slide atual sobre o total). -->

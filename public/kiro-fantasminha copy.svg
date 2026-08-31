@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Marca visual estilizada do "fantasminha" do Kiro para a capa da apresentação.
+  Desenho próprio e simplificado (não é o logo oficial), usado apenas como
+  identidade visual da apresentação. Cores em roxo/índigo para combinar com o
+  tema. Comentários e nomes em pt-BR (steering IDIOMA).
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 120 140"
+  width="120"
+  height="140"
+  role="img"
+  aria-label="Fantasminha do Kiro"
+>
+  <defs>
+    <!-- Gradiente de preenchimento do corpo do fantasminha. -->
+    <linearGradient id="corpoFantasminha" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a78bfa" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <!-- Sombra suave sob o fantasminha. -->
+    <radialGradient id="sombraFantasminha" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Sombra projetada. -->
+  <ellipse cx="60" cy="132" rx="34" ry="6" fill="url(#sombraFantasminha)" />
+
+  <!--
+    Corpo do fantasminha: topo arredondado (cabeça) e base ondulada
+    (as "pontinhas" clássicas de fantasma).
+  -->
+  <path
+    fill="url(#corpoFantasminha)"
+    d="M60 10
+       C 33 10, 20 30, 20 56
+       L 20 112
+       C 20 118, 26 120, 30 115
+       C 34 110, 40 110, 44 115
+       C 48 120, 54 120, 58 115
+       C 61 111, 65 111, 68 115
+       C 72 120, 78 120, 82 115
+       C 86 110, 92 110, 96 115
+       C 100 120, 100 116, 100 112
+       L 100 56
+       C 100 30, 87 10, 60 10 Z"
+  />
+
+  <!-- Olhos. -->
+  <ellipse cx="47" cy="58" rx="7.5" ry="10" fill="#0f172a" />
+  <ellipse cx="73" cy="58" rx="7.5" ry="10" fill="#0f172a" />
+  <!-- Brilho dos olhos. -->
+  <circle cx="49.5" cy="54" r="2.4" fill="#ffffff" />
+  <circle cx="75.5" cy="54" r="2.4" fill="#ffffff" />
+
+  <!-- Boquinha discreta. -->
+  <path
+    d="M54 74 Q60 80 66 74"
+    fill="none"
+    stroke="#0f172a"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+</svg>
