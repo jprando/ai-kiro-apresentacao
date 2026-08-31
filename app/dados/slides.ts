@@ -79,6 +79,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(0), y: LINHA_ASSUNTOS },
       conteudo: {
         logo: '/kiro-fantasminha.svg',
+        ilustracao: 'fantasminha-portas',
         subtitulo: 'Um agente, todas as superfícies',
         descricao:
           'Uma jornada visual pelos recursos do Kiro IDE — o ambiente de desenvolvimento com IA que mantém você no controle.'
@@ -93,6 +94,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(1), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-list-checks',
+        ilustracao: 'trilha-paradas',
         descricao: 'O caminho que vamos percorrer:',
         topicos: [
           'Overview: IDE, CLI, Web, Mobile e Crew',
@@ -113,6 +115,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(2), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-layers',
+        ilustracao: 'agente-portas',
         subtitulo: 'Um único agente, várias formas de conversar com ele',
         descricao:
           'Kiro é um só agente disponível onde você trabalha. IDE, CLI, Web e Mobile são portas de entrada para o mesmo "harness" unificado; o Crew é um agente pessoal que roda no seu hardware. Configurou uma vez — vale em qualquer superfície.',
@@ -136,6 +139,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['ide-d-editor', 'ide-d-specs', 'ide-d-chat', 'ide-d-controle'],
       conteudo: {
         icone: 'i-lucide-code-2',
+        ilustracao: 'editor-robo',
         subtitulo: 'O ambiente desktop, em profundidade',
         descricao:
           'Ambiente de desenvolvimento desktop construído sobre a base do VS Code, com capacidades agentic. É aqui que exploramos os recursos com mais detalhe.'
@@ -199,6 +203,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['hist-d-base', 'hist-d-agentic'],
       conteudo: {
         icone: 'i-lucide-book-open',
+        ilustracao: 'base-tijolos',
         subtitulo: 'De onde o Kiro IDE vem',
         descricao:
           'O IDE nasce de uma base consolidada de editor e ganha um agente de IA no centro da experiência.'
@@ -238,6 +243,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['mod-d-catalogo', 'mod-d-auto', 'mod-d-custo'],
       conteudo: {
         icone: 'i-lucide-cpu',
+        ilustracao: 'chips-cerebros',
         subtitulo: 'Escolha o modelo certo para a tarefa',
         descricao:
           'Acesso a modelos de fronteira e de peso aberto (OpenAI, Anthropic e outros). Escolha manual, ou deixe o Auto rotear cada tarefa.'
@@ -289,6 +295,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['eff-d-niveis', 'eff-d-quando'],
       conteudo: {
         icone: 'i-lucide-gauge',
+        ilustracao: 'velocimetro',
         subtitulo: 'Quanto o modelo deve "pensar"',
         descricao:
           'Controla a profundidade de raciocínio: menos esforço = respostas rápidas e baratas; mais esforço = análise profunda. Disponível no IDE e no CLI.'
@@ -328,6 +335,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['harn-d-definicao', 'harn-d-loop'],
       conteudo: {
         icone: 'i-lucide-settings-2',
+        ilustracao: 'motor-loop',
         subtitulo: 'O "motor" por trás do agente',
         descricao:
           'Harness é a camada que orquestra tudo em uma execução do agente: conversa, ferramentas, contexto, permissões e a conversa com os modelos.'
@@ -367,6 +375,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['hk-d-unificado', 'hk-d-acp', 'hk-d-onde'],
       conteudo: {
         icone: 'i-lucide-network',
+        ilustracao: 'motor-portas',
         subtitulo: 'Um harness, muitas superfícies',
         descricao:
           'No centro está o harness unificado. IDE, CLI, Web e Mobile são apenas front-ends dele. Por isso uma regra ou configuração vale igual em todo lugar.'
@@ -418,6 +427,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['glob-d-local', 'glob-d-conteudo'],
       conteudo: {
         icone: 'i-lucide-house',
+        ilustracao: 'casinha-usuario',
         subtitulo: '~/.kiro/ — viaja com você',
         descricao:
           'No seu diretório home. Guarda sua configuração pessoal, aplicada a todos os projetos locais na sua máquina.'
@@ -457,6 +467,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['proj-d-repo', 'proj-d-itens'],
       conteudo: {
         icone: 'i-lucide-folder-git-2',
+        ilustracao: 'pasta-git',
         subtitulo: '.kiro/ — viaja com o repositório',
         descricao:
           'Fica no repositório. Todo mundo (e toda superfície) que abre o projeto recebe o mesmo steering, specs, agents, hooks e MCP servers.'
@@ -496,6 +507,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['spec-d-tres', 'spec-d-fluxo', 'spec-d-paralelo'],
       conteudo: {
         icone: 'i-lucide-file-text',
+        ilustracao: 'tres-documentos',
         subtitulo: 'Do requisito ao código, com rastreio',
         descricao:
           'Especificações estruturadas que transformam ideias em planos de implementação. Diferencial para quem já usou agentes: planejar antes de codar.'
@@ -547,6 +559,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['steer-d-oque', 'steer-d-inclusao', 'steer-d-escopo'],
       conteudo: {
         icone: 'i-lucide-compass',
+        ilustracao: 'bussola',
         subtitulo: 'Contexto persistente do projeto',
         descricao:
           'Arquivos markdown que dão ao Kiro conhecimento permanente sobre padrões, arquitetura e convenções — sem repetir tudo a cada conversa.'
@@ -598,6 +611,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['hook-d-gatilhos', 'hook-d-acoes', 'hook-d-usos'],
       conteudo: {
         icone: 'i-lucide-zap',
+        ilustracao: 'raio-engrenagem',
         subtitulo: 'Automação orientada a eventos',
         descricao:
           'Executam comandos ou prompts automaticamente quando algo acontece na sessão. Você define o gatilho e a ação; o Kiro cuida da execução.'
@@ -649,6 +663,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['mcp-d-oque', 'mcp-d-config', 'mcp-d-usos'],
       conteudo: {
         icone: 'i-lucide-cable',
+        ilustracao: 'plugue-servidores',
         subtitulo: 'Model Context Protocol',
         descricao:
           'Conecta o Kiro a servidores especializados que fornecem ferramentas, prompts e recursos extras — estendendo o que o agente sabe fazer.'
@@ -700,6 +715,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['skill-d-oque', 'skill-d-disclosure', 'skill-d-formato'],
       conteudo: {
         icone: 'i-lucide-graduation-cap',
+        ilustracao: 'mochila-instrucoes',
         subtitulo: 'Pacotes de instruções portáteis',
         descricao:
           'Seguem o padrão aberto Agent Skills: instruções, scripts e templates reutilizáveis que o Kiro ativa quando são relevantes à tarefa.'
@@ -751,6 +767,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['power-d-problema', 'power-d-dinamico', 'power-d-conteudo'],
       conteudo: {
         icone: 'i-lucide-plug-zap',
+        ilustracao: 'plugue-faisca',
         subtitulo: 'MCP + conhecimento, sob demanda',
         descricao:
           'Empacotam servidores MCP com skills e boas práticas. Ao mencionar palavras-chave, o Kiro carrega a power certa automaticamente.'
@@ -802,6 +819,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['chk-d-checkpoint', 'chk-d-rewind', 'chk-d-rede'],
       conteudo: {
         icone: 'i-lucide-history',
+        ilustracao: 'linha-tempo-rewind',
         subtitulo: 'Volte atrás com segurança',
         descricao:
           'Duas formas de recuar: checkpoints restauram os arquivos a um ponto anterior; rewind bifurca a conversa em um turn anterior. Ótimo para os céticos.'
@@ -853,6 +871,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['perm-d-capacidades', 'perm-d-prioridade', 'perm-d-escopos'],
       conteudo: {
         icone: 'i-lucide-shield',
+        ilustracao: 'escudo-semaforo',
         subtitulo: 'Controle do que o agente pode fazer',
         descricao:
           'Sistema baseado em capacidades: você define regras por capacidade, com padrões de correspondência e efeitos explícitos. Nada de "confiar em tudo".'
@@ -904,6 +923,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['ag-d-oque', 'ag-d-config', 'ag-d-sub'],
       conteudo: {
         icone: 'i-lucide-users-round',
+        ilustracao: 'robos-especialistas',
         subtitulo: 'Agentes especializados',
         descricao:
           'Perfis de agente para fluxos específicos: quais ferramentas ele acessa, quais permissões tem e qual contexto carrega.'
@@ -955,6 +975,7 @@ export const apresentacaoKiro: Apresentacao = {
       subnos: ['lang-d-ts', 'lang-d-py', 'lang-d-java'],
       conteudo: {
         icone: 'i-lucide-file-terminal',
+        ilustracao: 'simbolos-linguagens',
         subtitulo: 'Assistência especializada por linguagem',
         descricao:
           'Guias com boas práticas para escrever, depurar e manter código com o Kiro em diferentes linguagens e frameworks.'
@@ -1005,6 +1026,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(21), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-panels-top-left',
+        ilustracao: 'agente-portas',
         subtitulo: 'Rápido: só para você saber que existem',
         descricao:
           'O mesmo agente, em outras portas de entrada. Aqui, apenas os destaques de cada uma.'
@@ -1017,6 +1039,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(22), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-terminal-square',
+        ilustracao: 'terminal',
         subtitulo: 'O agente no seu terminal',
         topicos: [
           'Chat interativo com TUI rica (syntax highlighting, painéis, temas)',
@@ -1033,6 +1056,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(23), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-globe',
+        ilustracao: 'navegador-pr',
         subtitulo: 'Agente no navegador (Preview)',
         topicos: [
           'Sem setup: roda em sandbox na nuvem em app.kiro.dev',
@@ -1049,6 +1073,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(24), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-smartphone',
+        ilustracao: 'celular-sessao',
         subtitulo: 'Kiro no bolso (iOS, early access)',
         topicos: [
           'App iOS em early access via TestFlight',
@@ -1065,6 +1090,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(25), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-users',
+        ilustracao: 'equipe-robos',
         subtitulo: 'Agente pessoal que roda no seu hardware',
         topicos: [
           'Open-source, persistente, auto-aprendente e auto-evolutivo',
@@ -1083,6 +1109,7 @@ export const apresentacaoKiro: Apresentacao = {
       posicao: { x: coluna(26), y: LINHA_ASSUNTOS },
       conteudo: {
         logo: '/kiro-fantasminha.svg',
+        ilustracao: 'fantasminha-portas',
         subtitulo: 'Um agente, todas as superfícies',
         descricao:
           'Kiro coloca você no controle: specs para planejar, steering para padronizar, permissions para autorizar e checkpoints para voltar atrás. Bom código!'

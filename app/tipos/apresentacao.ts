@@ -52,6 +52,13 @@ export interface ConteudoSlide {
   topicos?: string[]
   /** Ícone (nome no formato do @nuxt/icon, ex.: 'i-lucide-sparkles'). */
   icone?: string
+  /**
+   * CHAVE estável que mapeia para uma ilustração de fundo conceitual do slide
+   * (a "big image" que desenha a ideia do tema, ex.: 'motor-loop', 'velocimetro',
+   * 'escudo-semaforo'). Resolvida pelo componente IlustracaoFundo; ausência ou
+   * chave desconhecida = mantém apenas o fundo padrão do cartão (degrada bem).
+   */
+  ilustracao?: string
   /** Cor de destaque opcional (classe utilitária ou token de cor). */
   cor?: string
   /**

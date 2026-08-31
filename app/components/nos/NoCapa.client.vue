@@ -30,10 +30,15 @@ const rotuloTipo = computed(() => {
 
 <template>
   <div class="cartao-capa" :class="[data.atual && 'cartao-capa--atual']">
+    <!-- Ilustração conceitual de fundo ("big image" do slide), atrás do texto. -->
+    <IlustracaoFundo :chave="data.conteudo?.ilustracao" :camada="data.camada" />
+
     <!-- Conectores de entrada/saída da metáfora de fluxo do Vue Flow. -->
     <Handle id="fluxo-entrada" type="target" :position="Position.Left" :connectable="false" />
 
-    <span class="cartao-badge">{{ rotuloTipo }}</span>
+    <!-- Conteúdo textual acima da ilustração (camada de leitura). -->
+    <div class="cartao-conteudo">
+      <span class="cartao-badge">{{ rotuloTipo }}</span>
 
     <!-- Logo/marca visual (ex.: fantasminha do Kiro na capa). -->
     <img
@@ -56,12 +61,13 @@ const rotuloTipo = computed(() => {
     <p v-if="data.conteudo?.descricao" class="cartao-descricao">
       {{ data.conteudo.descricao }}
     </p>
-    <ul v-if="data.conteudo?.topicos?.length" class="cartao-topicos">
-      <li v-for="topico in data.conteudo.topicos" :key="topico" class="cartao-topico">
-        <UIcon name="i-lucide-chevron-right" class="cartao-marcador" />
-        <span>{{ topico }}</span>
-      </li>
-    </ul>
+      <ul v-if="data.conteudo?.topicos?.length" class="cartao-topicos">
+        <li v-for="topico in data.conteudo.topicos" :key="topico" class="cartao-topico">
+          <UIcon name="i-lucide-chevron-right" class="cartao-marcador" />
+          <span>{{ topico }}</span>
+        </li>
+      </ul>
+    </div>
 
     <Handle id="fluxo-saida" type="source" :position="Position.Right" :connectable="false" />
   </div>
@@ -71,6 +77,8 @@ const rotuloTipo = computed(() => {
 .cartao-capa {
   --cor: var(--camada-abertura);
   --cor-forte: var(--camada-abertura-forte);
+  position: relative;
+  overflow: hidden;
   width: 360px;
   padding: 1.75rem 1.75rem 1.5rem;
   border-radius: 1.25rem;
@@ -95,6 +103,12 @@ const rotuloTipo = computed(() => {
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cor-forte) 55%, transparent),
     0 28px 60px -22px color-mix(in srgb, var(--cor) 60%, black);
+}
+
+/* Camada de leitura: fica acima da ilustração de fundo para garantir contraste. */
+.cartao-conteudo {
+  position: relative;
+  z-index: 2;
 }
 
 .cartao-badge {
