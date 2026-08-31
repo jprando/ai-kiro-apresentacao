@@ -20,6 +20,7 @@ const {
   nos,
   arestas,
   slideAtual,
+  wallpaperAtual,
   indiceAtual,
   ordem,
   proximo,
@@ -30,6 +31,38 @@ const {
   irParaFim,
   enquadrarTudo
 } = usarApresentacao()
+
+/**
+ * Chave de transição do wallpaper: muda quando a imagem/chave do fundo muda,
+ * disparando o crossfade curto. Slides que compartilham o mesmo wallpaper
+ * (ex.: detalhes que herdam a imagem do pai) NÃO reanimam o fundo.
+ */
+const chaveWallpaper = computed(() => {
+  const w = wallpaperAtual.value
+  if (!w) return 'vazio'
+  return w.tipo === 'imagem' ? `img:${w.url}` : `svg:${w.chave}`
+})
+
+/**
+ * Prefetch LEVE (custo-zero) só dos vizinhos imediatos: quando o próximo/anterior
+ * slide tem PNG próprio, adiciona <link rel="prefetch"> para o navegador buscar
+ * a imagem em ociosidade. Não pré-carrega os 17 de uma vez; SVGs não precisam.
+ */
+const prefetchVizinhos = computed(() => {
+  const alvos = [indiceAtual.value - 1, indiceAtual.value + 1]
+  const urls = new Set<string>()
+  for (const indice of alvos) {
+    const id = ordem.value[indice]
+    if (!id) continue
+    const url = urlImagemSlide(id)
+    if (url) urls.add(url)
+  }
+  return [...urls].map((href) => ({ rel: 'prefetch', as: 'image', href }))
+})
+
+useHead({
+  link: prefetchVizinhos
+})
 
 /** Percentual de progresso da apresentação (para a barra do topo). */
 const progresso = computed(() => {
@@ -105,6 +138,36 @@ function aoInicializarPalco() {
 
 <template>
   <div class="palco">
+    <!--
+      Wallpaper do palco: a "big image" do slide em foco, ATRÁS do Vue Flow.
+      É decorativo (aria-hidden, pointer-events:none). O crossfade curto na
+      troca de slide é feito por <Transition> com :key = chaveWallpaper.
+    -->
+    <div class="palco-wallpaper-camada" aria-hidden="true">
+      <Transition name="wallpaper-fade" mode="out-in">
+        <div :key="chaveWallpaper" class="palco-wallpaper">
+          <div
+            v-if="wallpaperAtual?.tipo === 'imagem'"
+            class="palco-wallpaper-imagem"
+            :style="{ backgroundImage: `url('${wallpaperAtual.url}')` }"
+          />
+          <div
+            v-else-if="wallpaperAtual?.tipo === 'svg'"
+            class="palco-wallpaper-svg"
+            :class="`camada-${wallpaperAtual.camada}`"
+          >
+            <IlustracaoFundo
+              :chave="wallpaperAtual.chave"
+              :camada="wallpaperAtual.camada"
+              modo="wallpaper"
+            />
+          </div>
+        </div>
+      </Transition>
+      <!-- Overlay de legibilidade NO PALCO (não no card): escurece + vinheta. -->
+      <div class="palco-wallpaper-overlay" />
+    </div>
+
     <VueFlow
       id="palco-apresentacao"
       :nodes="nos"
@@ -197,9 +260,76 @@ function aoInicializarPalco() {
 }
 
 .palco-fluxo {
+  position: relative;
+  /* Acima do wallpaper (z-index:0), abaixo dos overlays de UI (z-index:10). */
+  z-index: 1;
   width: 100%;
   height: 100%;
   background: transparent;
+}
+
+/*
+  Camada de wallpaper: ocupa todo o palco, ATRÁS do Vue Flow, ACIMA do
+  gradiente base do .palco. Decorativa (aria-hidden + pointer-events:none).
+*/
+.palco-wallpaper-camada {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.palco-wallpaper {
+  position: absolute;
+  inset: 0;
+}
+
+/* PNG do slide: cobre o palco, centralizado (cover). */
+.palco-wallpaper-imagem {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* SVG conceitual grande: contêiner que fixa --cor/--cor-forte via camada. */
+.palco-wallpaper-svg {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+  Overlay de legibilidade do PALCO: escurecimento + vinheta radial para os
+  cartões (primeiro plano) permanecerem legíveis sobre o wallpaper (ambiente).
+  Fica ACIMA do wallpaper mas ABAIXO do Vue Flow.
+*/
+.palco-wallpaper-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 45%, rgba(11, 16, 32, 0.35), rgba(11, 16, 32, 0.82) 90%),
+    linear-gradient(180deg, rgba(11, 16, 32, 0.45), rgba(19, 26, 48, 0.6));
+}
+
+/* Crossfade curto do wallpaper na troca de slide (custo-zero: pontual). */
+.wallpaper-fade-enter-active,
+.wallpaper-fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.wallpaper-fade-enter-from,
+.wallpaper-fade-leave-to {
+  opacity: 0;
+}
+
+/* Acessibilidade: sem crossfade sob prefers-reduced-motion (troca instantânea). */
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper-fade-enter-active,
+  .wallpaper-fade-leave-active {
+    transition: none;
+  }
 }
 
 /* Barra de progresso fina no topo. */

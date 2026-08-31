@@ -1,17 +1,26 @@
-<!-- app/components/IlustracaoFundo.client.vue — Camada de fundo ("big image") de cada nó/slide. -->
-<!-- Resolve uma CHAVE estável (conteudo.ilustracao) para um SVG conceitual inline que -->
-<!-- "desenha" a ideia do slide de forma didática. Fica atrás do texto (inset:0, aria-hidden, -->
-<!-- pointer-events:none); herda a paleta da camada via var(--cor)/var(--cor-forte). -->
+<!-- app/components/IlustracaoFundo.client.vue — SVG conceitual ("big image") reutilizado em 2 modos. -->
+<!-- Resolve uma CHAVE estável (conteudo.ilustracao) para um SVG inline que "desenha" a ideia do -->
+<!-- slide. modo='card' (padrão): fundo esmaecido do cartão. modo='wallpaper': fundo do PALCO em -->
+<!-- tela cheia, sem overlay interno (legibilidade vem do overlay do palco). aria-hidden + no-events. -->
 
 <script setup lang="ts">
 import type { CamadaVisual } from '~/tipos/apresentacao'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   /** Chave estável da ilustração (ex.: 'motor-loop'). Ausente/desconhecida = não renderiza. */
   chave?: string
   /** Camada visual do slide — usada só para variações de estilo/semântica. */
   camada: CamadaVisual
-}>()
+  /**
+   * Modo de renderização:
+   * - 'card'      : dentro do cartão (opacidade baixa + overlay interno próprio);
+   * - 'wallpaper' : fundo do palco em tela cheia (sem overlay interno, pois a
+   *                 legibilidade é garantida pelo overlay do PalcoApresentacao).
+   */
+  modo?: 'card' | 'wallpaper'
+}>(), {
+  modo: 'card'
+})
 
 /**
  * Conjunto de chaves que o resolvedor sabe desenhar. Se a chave não estiver
@@ -60,10 +69,12 @@ void props.camada
   <div
     v-if="chaveValida"
     class="ilustracao-fundo"
+    :class="`ilustracao-fundo--${modo}`"
     aria-hidden="true"
   >
-    <!-- Overlay de contraste: garante legibilidade do texto sobre o desenho. -->
-    <div class="ilustracao-overlay" />
+    <!-- Overlay de contraste do CARTÃO: só no modo 'card'. No modo 'wallpaper'
+         a legibilidade vem do overlay do palco, evitando escurecimento duplo. -->
+    <div v-if="modo === 'card'" class="ilustracao-overlay" />
 
     <svg
       class="ilustracao-svg"
@@ -555,6 +566,17 @@ void props.camada
   /* Sutil: o desenho é uma "marca d'água" conceitual, não decoração forte. */
   opacity: 0.16;
   filter: blur(0.2px);
+}
+
+/*
+  Modo WALLPAPER: o SVG ocupa o fundo do palco em tela cheia. Sem overlay
+  interno (o palco já escurece para legibilidade). Opacidade um pouco maior
+  que no card para o desenho "aparecer" como ambiente, mas ainda discreto o
+  suficiente para os cartões continuarem em primeiro plano.
+*/
+.ilustracao-fundo--wallpaper .ilustracao-svg {
+  opacity: 0.22;
+  filter: none;
 }
 
 /*

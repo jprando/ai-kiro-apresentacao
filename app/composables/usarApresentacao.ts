@@ -16,6 +16,17 @@ import type { Edge, Node } from '@vue-flow/core'
 import type { Apresentacao, CamadaVisual, Slide } from '~/tipos/apresentacao'
 import { apresentacaoKiro } from '~/dados/slides'
 
+/**
+ * Wallpaper (plano de fundo do palco) resolvido para o slide em foco.
+ * - 'imagem' : PNG existente em public/images/{id}.png (servido por URL);
+ * - 'svg'    : SVG conceitual do IlustracaoFundo, identificado por `chave`;
+ * - null     : slide sem imagem nem chave (fundo do palco fica só no gradiente).
+ */
+export type WallpaperAtual =
+  | { tipo: 'imagem'; url: string; camada: CamadaVisual }
+  | { tipo: 'svg'; chave: string; camada: CamadaVisual }
+  | null
+
 /** Duração padrão (ms) das animações de câmera entre nós. */
 const DURACAO_ANIMACAO = 700
 
@@ -91,6 +102,54 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
   const slideAtual = computed<Slide | undefined>(() =>
     idAtual.value ? mapaSlides.value.get(idAtual.value) : undefined
   )
+
+  /**
+   * Wallpaper (plano de fundo do palco) do slide em foco, resolvido por
+   * PRIORIDADE, sem qualquer chamada de rede (existência do PNG é build-time
+   * via urlImagemSlide -> import.meta.glob):
+   *
+   * 1. PNG do próprio slide: public/images/{idAtual}.png (assunto OU detalhe).
+   * 2. Herança do pai (detalhes, que não têm chave própria):
+   *    2a. PNG do assunto pai (public/images/{paiId}.png);
+   *    2b. chave SVG do assunto pai (conteudo.ilustracao) -> IlustracaoFundo.
+   * 3. Assunto sem PNG: sua própria chave SVG (conteudo.ilustracao).
+   *
+   * A camada é derivada de classificarCamada (mesma cor por camada dos nós),
+   * garantindo que o SVG do wallpaper receba var(--cor)/var(--cor-forte).
+   */
+  const wallpaperAtual = computed<WallpaperAtual>(() => {
+    const atual = slideAtual.value
+    if (!atual) return null
+
+    const camada = classificarCamada(atual)
+
+    // 1. PNG do próprio slide (vale para assunto e detalhe).
+    const urlProprio = urlImagemSlide(atual.id)
+    if (urlProprio) {
+      return { tipo: 'imagem', url: urlProprio, camada }
+    }
+
+    // 2. Detalhe sem PNG próprio: herda do assunto pai.
+    if (atual.tipo === 'detalhe' && atual.paiId) {
+      const urlPai = urlImagemSlide(atual.paiId)
+      if (urlPai) {
+        return { tipo: 'imagem', url: urlPai, camada }
+      }
+      const chavePai = mapaSlides.value.get(atual.paiId)?.conteudo?.ilustracao
+      if (chavePai) {
+        return { tipo: 'svg', chave: chavePai, camada }
+      }
+      return null
+    }
+
+    // 3. Assunto/panorama sem PNG: usa a própria chave SVG conceitual.
+    const chavePropria = atual.conteudo?.ilustracao
+    if (chavePropria) {
+      return { tipo: 'svg', chave: chavePropria, camada }
+    }
+
+    return null
+  })
 
   /**
    * Conjunto de IDs de detalhes (subnós) que devem estar visíveis.
@@ -290,6 +349,7 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
     indiceAtual,
     idAtual,
     slideAtual,
+    wallpaperAtual,
     ordem,
     // dados derivados para o Vue Flow
     nos,
