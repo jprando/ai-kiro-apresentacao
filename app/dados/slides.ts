@@ -21,7 +21,11 @@ import type { Apresentacao } from '~/tipos/apresentacao'
 // --- Grade de posicionamento -------------------------------------------------
 // Os assuntos principais ficam numa faixa horizontal. Os detalhes (subnós) de
 // cada assunto são posicionados logo abaixo do pai, distribuídos na horizontal.
-const ESPACO_X = 560
+// ESPACO_X=800: o assunto "ide" tem 4 detalhes (o leque mais largo da grade).
+// Centrado sob o pai, esse leque se estende ~490px para cada lado; com espaçamento
+// menor ele invadia a faixa do card vizinho "overview" (que é largo, 360px). Com
+// 800 todos os leques cabem entre os vizinhos com folga ≥ 40px, sem colisão.
+const ESPACO_X = 800
 const LINHA_ASSUNTOS = 0
 const LINHA_DETALHES = 300
 const PASSO_DETALHE = 250
