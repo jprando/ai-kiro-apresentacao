@@ -56,12 +56,16 @@ defineProps<{
   border-radius: 0.85rem;
   font-family: var(--fonte-texto);
   color: #eef1fb;
-  /* Fundo mais opaco/sólido para o texto contrastar melhor sobre o wallpaper do palco. */
-  background: linear-gradient(160deg, #0e1424, #080b16);
-  border: 1px solid color-mix(in srgb, var(--cor) 35%, transparent);
-  /* Leve blur separa o card do wallpaper de fundo sem pesar. */
-  backdrop-filter: blur(3px);
-  box-shadow: 0 12px 28px -18px rgba(0, 0, 0, 0.8);
+  /* Fundo praticamente sólido: cor opaca por baixo garante que o wallpaper do palco
+     nao transpareca pelo corpo do card; o gradiente escuro por cima preserva a
+     identidade elegante sem ficar totalmente chapado. */
+  background-color: #0b1120;
+  background-image: linear-gradient(160deg, #0e1424, #080b16);
+  border: 1px solid color-mix(in srgb, var(--cor) 45%, transparent);
+  /* Blur mais forte reforca a separacao do fundo (efeito vidro fosco). */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.9);
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease,
