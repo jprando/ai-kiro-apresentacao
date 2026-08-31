@@ -1,4 +1,6 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt.config.ts — Configuração raiz da apresentação Kiro (Nuxt 4 + Nuxt UI + Vue Flow).
+// Define tema escuro, tipografia self-hosted (Inter/Sora) e os CSS globais (incl. Vue Flow).
+// Referência da API: https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -9,12 +11,18 @@ export default defineNuxtConfig({
     preference: 'dark',
     fallback: 'dark'
   },
-  // Tipografia da apresentação via @nuxt/fonts (incluído pelo Nuxt UI).
+  // Tipografia servida localmente via @nuxt/fonts (incluído pelo Nuxt UI).
+  // provider: 'local' desativa TODOS os provedores externos (google/bunny/fontshare/
+  // fontsource) — elimina o fetch de descoberta na inicialização, compatível com proxy
+  // corporativo. Os arquivos .woff2 (Inter/Sora, pesos 400/600/700) ficam em public/fonts/
+  // e são resolvidos automaticamente pelo provedor local a partir do nome no font-family.
   fonts: {
-    families: [
-      { name: 'Inter', provider: 'google' },
-      { name: 'Sora', provider: 'google' }
-    ]
+    provider: 'local',
+    defaults: {
+      weights: [400, 600, 700],
+      styles: ['normal'],
+      subsets: ['latin']
+    }
   },
   css: [
     '~/assets/css/main.css',
