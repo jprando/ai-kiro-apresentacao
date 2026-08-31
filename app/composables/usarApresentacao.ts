@@ -13,6 +13,7 @@
 
 import { useVueFlow } from '@vue-flow/core'
 import type { Edge, Node } from '@vue-flow/core'
+import { withBase } from 'ufo'
 import type { Apresentacao, CamadaVisual, Slide } from '~/tipos/apresentacao'
 import { apresentacaoKiro } from '~/dados/slides'
 
@@ -80,6 +81,11 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
   // o componente <VueFlow :id="..."> do palco.
   const { setCenter, fitView, findNode } = useVueFlow('palco-apresentacao')
 
+  // baseURL do app (ex.: '/' em dev, '/ai-kiro-apresentacao/' no GitHub Pages).
+  // Lida no topo do composable (contexto Nuxt garantido, antes de qualquer await)
+  // para prefixar as URLs de wallpaper que apontam para public/ (assets absolutos).
+  const baseUrl = useRuntimeConfig().app.baseURL
+
   // Índice do slide atual na sequência de navegação. Estado 100% client-side.
   const indiceAtual = useState<number>('apresentacao-indice', () => 0)
 
@@ -127,16 +133,18 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
     const camada = classificarCamada(atual)
 
     // 1. PNG do próprio slide (vale para assunto e detalhe).
+    // withBase prefixa com a baseURL (no-op quando base='/'), garantindo que a
+    // imagem carregue sob o subcaminho /ai-kiro-apresentacao/ no GitHub Pages.
     const urlProprio = urlImagemSlide(atual.id)
     if (urlProprio) {
-      return { tipo: 'imagem', url: urlProprio, camada }
+      return { tipo: 'imagem', url: withBase(urlProprio, baseUrl), camada }
     }
 
     // 2. Detalhe sem PNG próprio: herda do assunto pai.
     if (atual.tipo === 'detalhe' && atual.paiId) {
       const urlPai = urlImagemSlide(atual.paiId)
       if (urlPai) {
-        return { tipo: 'imagem', url: urlPai, camada }
+        return { tipo: 'imagem', url: withBase(urlPai, baseUrl), camada }
       }
       const chavePai = mapaSlides.value.get(atual.paiId)?.conteudo?.ilustracao
       if (chavePai) {

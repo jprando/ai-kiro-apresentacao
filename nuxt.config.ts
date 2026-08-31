@@ -5,6 +5,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: ['@nuxt/ui'],
+  // Preset Nitro do GitHub Pages: gera .nojekyll (impede o Jekyll de ignorar
+  // _nuxt/) e o fallback 404.html do SPA. A baseURL do subcaminho é fornecida
+  // via NUXT_APP_BASE_URL no build de CI.
+  nitro: {
+    preset: 'github-pages'
+  },
   // Tema escuro elegante como base do infográfico (a apresentação foi
   // desenhada para o modo escuro; sem seletor no palco).
   colorMode: {
