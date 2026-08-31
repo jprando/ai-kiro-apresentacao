@@ -1,4 +1,4 @@
-# Publica a apresentacao Nuxt (site estatico) no GitHub Pages.
+# Publica a apresentação Nuxt (site estático) no GitHub Pages.
 # Faz o build com o preset github_pages e a base URL do subcaminho /ai-kiro-apresentacao/.
 name: Publicar apresentação no GitHub Pages
 
@@ -9,11 +9,11 @@ on:
   # Permite disparo manual pela aba Actions
   workflow_dispatch:
 
-# Permissoes minimas no nivel do workflow
+# Permissões mínimas no nível do workflow
 permissions:
   contents: read
 
-# Nao sobrepor deploys de Pages em andamento
+# Não sobrepor deploys de Pages em andamento
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -25,8 +25,8 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      # Habilita o pnpm na versao fixada (pin 11.24.0) ANTES do setup-node,
-      # pois o cache 'pnpm' do setup-node exige o pnpm ja disponivel
+      # Habilita o pnpm na versão fixada (pin 11.24.0) ANTES do setup-node,
+      # pois o cache 'pnpm' do setup-node exige o pnpm já disponível
       - name: Instalar pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -41,7 +41,7 @@ jobs:
       - name: Instalar dependências
         run: pnpm install --frozen-lockfile
 
-      # Build estatico de Pages: define a base URL do subcaminho e usa o preset github_pages
+      # Build estático de Pages: define a base URL do subcaminho e usa o preset github_pages
       - name: Gerar build de Pages
         env:
           NUXT_APP_BASE_URL: /ai-kiro-apresentacao/
@@ -55,7 +55,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    # Permissoes necessarias para publicar no Pages via GITHUB_TOKEN automatico
+    # Permissões necessárias para publicar no Pages via GITHUB_TOKEN automático
     permissions:
       pages: write
       id-token: write
