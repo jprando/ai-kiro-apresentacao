@@ -31,7 +31,7 @@ const rotuloTipo = computed(() => {
 <template>
   <div class="cartao-capa" :class="[data.atual && 'cartao-capa--atual']">
     <!-- Conectores de entrada/saída da metáfora de fluxo do Vue Flow. -->
-    <Handle type="target" :position="Position.Left" />
+    <Handle id="fluxo-entrada" type="target" :position="Position.Left" :connectable="false" />
 
     <span class="cartao-badge">{{ rotuloTipo }}</span>
 
@@ -63,7 +63,7 @@ const rotuloTipo = computed(() => {
       </li>
     </ul>
 
-    <Handle type="source" :position="Position.Right" />
+    <Handle id="fluxo-saida" type="source" :position="Position.Right" :connectable="false" />
   </div>
 </template>
 

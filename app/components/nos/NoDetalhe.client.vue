@@ -17,7 +17,7 @@ defineProps<{
 
 <template>
   <div class="cartao-detalhe" :class="[data.atual && 'cartao-detalhe--atual']">
-    <Handle type="target" :position="Position.Top" />
+    <Handle id="detalhe-entrada" type="target" :position="Position.Top" :connectable="false" />
     <div class="cartao-cabecalho">
       <div class="cartao-icone-aro">
         <UIcon
@@ -33,7 +33,7 @@ defineProps<{
     <p v-if="data.conteudo?.descricao" class="cartao-descricao">
       {{ data.conteudo.descricao }}
     </p>
-    <Handle type="source" :position="Position.Bottom" />
+    <Handle id="detalhe-saida" type="source" :position="Position.Bottom" :connectable="false" />
   </div>
 </template>
 

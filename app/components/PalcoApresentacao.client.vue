@@ -430,10 +430,44 @@ function aoInicializarPalco() {
 .aresta-apresentacao .vue-flow__edge-path {
   stroke: rgba(139, 123, 240, 0.55);
   stroke-width: 2;
+  transition:
+    opacity 0.45s ease,
+    stroke 0.45s ease;
 }
 
 .vue-flow__edge.animated .vue-flow__edge-path {
   stroke: rgba(56, 189, 248, 0.7);
+}
+
+/*
+  Aresta de fluxo que NÃO toca o nó atual: fortemente esmaecida para não
+  desenhar linhas cruzando a tela rumo a vizinhos fora do viewport (efeito de
+  "linha que se conecta a nada" ao dar zoom em um nó). Mantemos uma opacidade
+  mínima para preservar a leitura do grafo na visão geral (Esc / enquadrar).
+*/
+.aresta-fluxo-esmaecida {
+  opacity: 0.1;
+}
+
+/* Aresta de fluxo que liga o nó atual a um vizinho: em destaque. */
+.aresta-fluxo-ativa {
+  opacity: 1;
+}
+
+/*
+  Handles do Vue Flow (os pequenos círculos nas bordas dos cartões). A
+  apresentação não permite criar conexões manualmente, então eles são apenas
+  âncoras internas para desenhar as arestas — nunca devem aparecer.
+*/
+.vue-flow__handle {
+  width: 1px;
+  height: 1px;
+  min-width: 0;
+  min-height: 0;
+  background: transparent;
+  border: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
