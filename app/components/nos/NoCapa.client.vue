@@ -3,6 +3,7 @@
 // 'overview'. Cartão infográfico com logo/ícone grande, hierarquia
 // tipográfica e lista de tópicos com marcadores.
 import { Handle, Position } from '@vue-flow/core'
+import { withBase } from 'ufo'
 import type { CamadaVisual, ConteudoSlide, TipoSlide } from '~/tipos/apresentacao'
 
 const props = defineProps<{
@@ -34,6 +35,14 @@ const rotuloTipo = computed(() => {
 const ehSlideMarca = computed(
   () => props.data.titulo === 'Kiro' || Boolean(props.data.conteudo?.logo)
 )
+
+// URL do logo prefixada com a baseURL do app. O valor cru ('/kiro-fantasminha.svg',
+// definido em app/dados/slides.ts) é um asset absoluto de public/ que quebraria sob o
+// subcaminho /ai-kiro-apresentacao/ do GitHub Pages; withBase corrige (no-op em base='/').
+const urlLogo = computed(() => {
+  const logo = props.data.conteudo?.logo
+  return logo ? withBase(logo, useRuntimeConfig().app.baseURL) : undefined
+})
 </script>
 
 <template>
@@ -47,8 +56,8 @@ const ehSlideMarca = computed(
 
     <!-- Logo/marca visual (ex.: fantasminha do Kiro na capa). -->
     <img
-      v-if="data.conteudo?.logo"
-      :src="data.conteudo.logo"
+      v-if="urlLogo"
+      :src="urlLogo"
       class="cartao-logo"
       :class="{ 'cartao-logo--flutua': data.atual }"
       alt="Fantasminha do Kiro"
