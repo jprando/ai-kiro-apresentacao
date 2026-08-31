@@ -56,16 +56,21 @@ defineProps<{
   border-radius: 0.85rem;
   font-family: var(--fonte-texto);
   color: #eef1fb;
-  /* Fundo praticamente sólido: cor opaca por baixo garante que o wallpaper do palco
-     nao transpareca pelo corpo do card; o gradiente escuro por cima preserva a
-     identidade elegante sem ficar totalmente chapado. */
-  background-color: #0b1120;
-  background-image: linear-gradient(160deg, #0e1424, #080b16);
-  border: 1px solid color-mix(in srgb, var(--cor) 45%, transparent);
-  /* Blur mais forte reforca a separacao do fundo (efeito vidro fosco). */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.9);
+  /* Glassmorphism: fundo escuro semitransparente deixa o wallpaper do palco
+     transparecer DESFOCADO por tras. O gradiente translucido preserva a
+     identidade elegante; a opacidade em ~0.5 (vidro fosco, nao transparente)
+     mantem o texto legivel mesmo sobre wallpapers claros/movimentados. */
+  background-color: rgba(15, 21, 38, 0.5);
+  background-image: linear-gradient(160deg, rgba(20, 27, 46, 0.55), rgba(11, 16, 32, 0.42));
+  /* Borda clara sutil realca o "vidro", combinando com a cor da camada. */
+  border: 1px solid color-mix(in srgb, var(--cor-forte) 25%, rgba(255, 255, 255, 0.2));
+  /* Blur forte + saturate dao o material de vidro fosco desfocando o fundo. */
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  /* Sombra de profundidade + realce claro interno no topo (brilho de vidro). */
+  box-shadow:
+    0 16px 40px -18px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease,
@@ -73,10 +78,13 @@ defineProps<{
 }
 
 .cartao-detalhe--atual {
-  border-color: var(--cor-forte);
+  /* Em foco, borda e realce de vidro ficam um pouco mais fortes; o inset
+     highlight no topo e reforcado para manter o toque glass mais evidente. */
+  border-color: color-mix(in srgb, var(--cor-forte) 45%, rgba(255, 255, 255, 0.28));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cor-forte) 50%, transparent),
-    0 18px 36px -18px color-mix(in srgb, var(--cor) 50%, black);
+    0 18px 36px -18px color-mix(in srgb, var(--cor) 50%, black),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .cartao-cabecalho {
