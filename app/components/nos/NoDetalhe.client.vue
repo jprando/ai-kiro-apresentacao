@@ -2,27 +2,30 @@
 // Nó customizado para um detalhamento de assunto ('detalhe' / subnó).
 // É revelado com animação quando o assunto pai está em foco.
 import { Handle, Position } from '@vue-flow/core'
-import type { ConteudoSlide, TipoSlide } from '~/tipos/apresentacao'
+import type { CamadaVisual, ConteudoSlide, TipoSlide } from '~/tipos/apresentacao'
 
 defineProps<{
   data: {
     titulo: string
     conteudo?: ConteudoSlide
     tipo: TipoSlide
+    camada: CamadaVisual
     atual: boolean
   }
 }>()
 </script>
 
 <template>
-  <div class="cartao-detalhe">
+  <div class="cartao-detalhe" :class="[data.atual && 'cartao-detalhe--atual']">
     <Handle type="target" :position="Position.Top" />
     <div class="cartao-cabecalho">
-      <UIcon
-        v-if="data.conteudo?.icone"
-        :name="data.conteudo.icone"
-        class="cartao-icone"
-      />
+      <div class="cartao-icone-aro">
+        <UIcon
+          v-if="data.conteudo?.icone"
+          :name="data.conteudo.icone"
+          class="cartao-icone"
+        />
+      </div>
       <h4 class="cartao-titulo">
         {{ data.titulo }}
       </h4>
@@ -36,33 +39,63 @@ defineProps<{
 
 <style scoped>
 .cartao-detalhe {
-  width: 220px;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  background: var(--ui-bg-muted, #1e293b);
-  color: var(--ui-text, #e2e8f0);
-  border: 1px dashed var(--ui-border-accented, #475569);
+  --cor: var(--camada-recurso);
+  --cor-forte: var(--camada-recurso-forte);
+  width: 228px;
+  padding: 0.95rem 1rem;
+  border-radius: 0.85rem;
+  font-family: var(--fonte-texto);
+  color: #eef1fb;
+  background: linear-gradient(160deg, #141b2e, #0d1220);
+  border: 1px solid color-mix(in srgb, var(--cor) 35%, transparent);
+  box-shadow: 0 12px 28px -18px rgba(0, 0, 0, 0.7);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.cartao-detalhe--atual {
+  border-color: var(--cor-forte);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cor-forte) 50%, transparent),
+    0 18px 36px -18px color-mix(in srgb, var(--cor) 50%, black);
 }
 
 .cartao-cabecalho {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
+}
+
+.cartao-icone-aro {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--cor) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cor) 32%, transparent);
 }
 
 .cartao-icone {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
+  color: var(--cor-forte);
 }
 
 .cartao-titulo {
-  font-size: 1rem;
+  font-family: var(--fonte-titulo);
+  font-size: 0.98rem;
   font-weight: 600;
+  line-height: 1.15;
   margin: 0;
 }
 
 .cartao-descricao {
-  font-size: 0.8rem;
-  opacity: 0.75;
-  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  opacity: 0.78;
+  margin: 0.45rem 0 0;
 }
 </style>

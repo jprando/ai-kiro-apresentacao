@@ -1,75 +1,70 @@
-# Nuxt Minimal Starter
+# Apresentação Kiro IDE
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Apresentação interativa, no estilo **infográfico animado**, sobre os recursos do
+**Kiro IDE**. Em vez de slides tradicionais, cada tema é um **nó de um grafo**
+(Vue Flow): a câmera desliza entre os nós e os assuntos revelam subnós de
+detalhamento conforme você navega.
 
-## Setup
+O conteúdo tem foco aprofundado no Kiro IDE (história, modelos, reasoning effort,
+harness e os recursos do `.kiro`: Specs, Steering, Hooks, MCP, Skills, Powers,
+Checkpoints, Permissions e Custom Agents) e menciona de forma breve as demais
+superfícies (CLI, Web, Mobile e Crew).
 
-Make sure to install dependencies:
+## Stack
+
+- **[Nuxt 4](https://nuxt.com/)** — framework Vue full-stack (usado aqui em modo
+  100% client-side / estático).
+- **[Nuxt UI](https://ui.nuxt.com/)** — componentes, ícones (`@nuxt/icon`,
+  coleção Lucide) e fontes (`@nuxt/fonts`).
+- **[Vue Flow](https://vueflow.dev/)** — grafo interativo que serve de palco da
+  apresentação (nós = assuntos, subnós = detalhes), renderizado apenas no cliente.
+
+## Pré-requisitos
+
+- **Node.js 22** (recomendado gerenciar via [nvm](https://github.com/nvm-sh/nvm)).
+- **pnpm** como gerenciador de pacotes.
 
 ```bash
-# npm
-npm install
+# Selecionar o Node 22 (exemplo com nvm)
+nvm use 22
+```
 
-# pnpm
+## Comandos
+
+Instalar as dependências:
+
+```bash
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Rodar em desenvolvimento (http://localhost:3000):
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
+Gerar o build de produção:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
 pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+Opcional — pré-renderizar a versão estática:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+pnpm generate
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Como navegar
+
+- Setas **←** / **→** (ou **↑** / **↓**, **PageUp** / **PageDown**, **Espaço**):
+  slide anterior / próximo.
+- **Home** / **End**: primeiro / último slide.
+- **Esc**: enquadra todo o grafo (visão geral).
+- Também é possível usar os botões e os **pontos de progresso** no rodapé.
+
+## Arquitetura
+
+A explicação detalhada da arquitetura (estrutura de nós/subnós, composable de
+navegação, integração Vue Flow client-only e decisões de custo-zero), com
+diagrama, está em [`docs/apresentacao.md`](./docs/apresentacao.md).

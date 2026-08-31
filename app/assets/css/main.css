@@ -1,3 +1,65 @@
 /* Estilos globais da apresentação (Nuxt UI + Tailwind) */
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+/*
+  Sistema visual coeso "infográfico animado".
+  ------------------------------------------------------------------
+  Tema escuro elegante como base, com uma paleta de cores de destaque
+  por CAMADA (abertura, IDE, harness, recurso, superfície). As variáveis
+  abaixo são consumidas pelos cartões de nó do Vue Flow (componentes
+  NoCapa/NoAssunto/NoDetalhe) e pelas classes .camada-* aplicadas pelo
+  motor (composable usarApresentacao).
+
+  Todos os nomes e comentários em pt-BR (steering IDIOMA).
+*/
+:root {
+  /* Tipografia (fontes carregadas via @nuxt/fonts). */
+  --fonte-titulo: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --fonte-texto: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Fundo do palco: gradiente escuro profundo. */
+  --palco-fundo-1: #0b1020;
+  --palco-fundo-2: #131a30;
+
+  /* Cor base (abertura) — roxo/índigo do Kiro. */
+  --camada-abertura: #8b7bf0;
+  --camada-abertura-forte: #a78bfa;
+
+  /* IDE — azul elétrico. */
+  --camada-ide: #38bdf8;
+  --camada-ide-forte: #7dd3fc;
+
+  /* Harness — verde-esmeralda (o "motor"). */
+  --camada-harness: #34d399;
+  --camada-harness-forte: #6ee7b7;
+
+  /* Recursos do .kiro — âmbar/laranja. */
+  --camada-recurso: #fbbf24;
+  --camada-recurso-forte: #fcd34d;
+
+  /* Superfícies — rosa/magenta. */
+  --camada-superficie: #f472b6;
+  --camada-superficie-forte: #f9a8d4;
+}
+
+/* Aplica a família de fontes no corpo da apresentação. */
+body {
+  font-family: var(--fonte-texto);
+}
+
+/*
+  Acessibilidade: respeita a preferência do usuário por menos movimento.
+  Quando 'prefers-reduced-motion: reduce', desligamos/encurtamos animações
+  e transições em todo o documento (steering de acessibilidade e boa prática).
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

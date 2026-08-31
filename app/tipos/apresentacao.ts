@@ -15,6 +15,24 @@
  */
 export type TipoSlide = 'capa' | 'agenda' | 'overview' | 'assunto' | 'detalhe'
 
+/**
+ * Camada visual usada para colorir os cartões de forma coerente, no estilo
+ * de um infográfico. A camada é derivada do id/tipo do slide pelo motor
+ * (composable), então não precisa ser preenchida manualmente nos dados.
+ *
+ * - 'abertura'   : capa, agenda, overview e encerramento
+ * - 'ide'        : o bloco aprofundado do Kiro IDE
+ * - 'harness'    : o conceito de harness e o harness do Kiro
+ * - 'recurso'    : os recursos do .kiro (specs, steering, hooks, etc.)
+ * - 'superficie' : as demais superfícies (CLI, Web, Mobile, Crew)
+ */
+export type CamadaVisual =
+  | 'abertura'
+  | 'ide'
+  | 'harness'
+  | 'recurso'
+  | 'superficie'
+
 /** Coordenada de posição de um nó no palco do Vue Flow. */
 export interface Posicao {
   x: number

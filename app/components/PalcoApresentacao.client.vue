@@ -25,10 +25,18 @@ const {
   proximo,
   anterior,
   irPara,
+  irParaIndice,
   irParaInicio,
   irParaFim,
   enquadrarTudo
 } = usarApresentacao()
+
+/** Percentual de progresso da apresentação (para a barra do topo). */
+const progresso = computed(() => {
+  const total = ordem.value.length
+  if (total <= 1) return 100
+  return (indiceAtual.value / (total - 1)) * 100
+})
 
 // Tipos de nó customizados registrados no Vue Flow. markRaw evita que o Vue
 // torne os componentes reativos desnecessariamente.
@@ -109,10 +117,29 @@ function aoInicializarPalco() {
       class="palco-fluxo"
       @pane-ready="aoInicializarPalco"
     >
-      <Background :gap="24" pattern-color="#334155" />
+      <Background :gap="26" pattern-color="#26304d" />
       <Controls position="bottom-left" />
       <MiniMap pannable zoomable />
     </VueFlow>
+
+    <!-- Barra de progresso fina no topo (slide atual sobre o total). -->
+    <div class="palco-progresso" aria-hidden="true">
+      <div class="palco-progresso-preenchido" :style="{ width: progresso + '%' }" />
+    </div>
+
+    <!-- Título do slide atual + contador, no topo. -->
+    <div class="palco-cabecalho">
+      <span class="palco-cabecalho-titulo">{{ slideAtual?.titulo ?? '' }}</span>
+      <span class="palco-cabecalho-contador">
+        slide {{ indiceAtual + 1 }} de {{ ordem.length }}
+      </span>
+    </div>
+
+    <!-- Dica de navegação por teclado, discreta, no canto. -->
+    <div class="palco-dica" role="note">
+      <UIcon name="i-lucide-keyboard" class="palco-dica-icone" />
+      <span>Use as setas <kbd>←</kbd> <kbd>→</kbd> para navegar</span>
+    </div>
 
     <!-- Barra de controles de navegação (client-side). -->
     <div class="palco-controles">
@@ -123,12 +150,21 @@ function aoInicializarPalco() {
         aria-label="Slide anterior"
         @click="anterior"
       />
-      <span class="palco-indicador">
-        {{ slideAtual?.titulo ?? '' }}
-        <span class="palco-contador">
-          {{ indiceAtual + 1 }} / {{ ordem.length }}
-        </span>
-      </span>
+
+      <!-- Indicador em pontos: um por slide, o atual em destaque. -->
+      <div class="palco-pontos" role="tablist" aria-label="Progresso da apresentação">
+        <button
+          v-for="(id, indice) in ordem"
+          :key="id"
+          type="button"
+          class="palco-ponto"
+          :class="{ 'palco-ponto--atual': indice === indiceAtual }"
+          :aria-label="`Ir para o slide ${indice + 1}`"
+          :aria-selected="indice === indiceAtual"
+          @click="irParaIndice(indice)"
+        />
+      </div>
+
       <UButton
         icon="i-lucide-chevron-right"
         color="neutral"
@@ -153,11 +189,91 @@ function aoInicializarPalco() {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  /* Fundo escuro em gradiente, base do infográfico. */
+  background:
+    radial-gradient(80% 60% at 50% 0%, #1a2340, transparent 70%),
+    linear-gradient(180deg, var(--palco-fundo-1, #0b1020), var(--palco-fundo-2, #131a30));
+  font-family: var(--fonte-texto);
 }
 
 .palco-fluxo {
   width: 100%;
   height: 100%;
+  background: transparent;
+}
+
+/* Barra de progresso fina no topo. */
+.palco-progresso {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.palco-progresso-preenchido {
+  height: 100%;
+  background: linear-gradient(90deg, var(--camada-abertura, #8b7bf0), var(--camada-ide, #38bdf8));
+  border-radius: 0 3px 3px 0;
+  transition: width 0.5s ease;
+}
+
+/* Cabeçalho: título do slide atual + contador. */
+.palco-cabecalho {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.5rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.palco-cabecalho-titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f5f7ff;
+}
+
+.palco-cabecalho-contador {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.55);
+}
+
+/* Dica de navegação por teclado, discreta no canto superior direito. */
+.palco-dica {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  color: rgba(226, 232, 240, 0.7);
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.palco-dica-icone {
+  font-size: 0.95rem;
+}
+
+.palco-dica kbd {
+  padding: 0.05rem 0.3rem;
+  border-radius: 0.3rem;
+  font-family: var(--fonte-texto);
+  font-size: 0.7rem;
+  background: rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.28);
 }
 
 /* Barra de controles fixada no rodapé centralizado. */
@@ -170,26 +286,44 @@ function aoInicializarPalco() {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.9rem;
   border-radius: 9999px;
-  background: var(--ui-bg-elevated, rgba(17, 24, 39, 0.9));
-  border: 1px solid var(--ui-border, #374151);
-  backdrop-filter: blur(6px);
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
 }
 
-.palco-indicador {
+/* Pontos de progresso: um por slide. */
+.palco-pontos {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  min-width: 120px;
-  font-weight: 600;
-  color: var(--ui-text, #f9fafb);
+  gap: 0.35rem;
+  max-width: 60vw;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.palco-contador {
-  font-size: 0.75rem;
-  font-weight: 400;
-  opacity: 0.7;
+.palco-ponto {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  background: rgba(148, 163, 184, 0.35);
+  transition:
+    width 0.3s ease,
+    background 0.3s ease;
+}
+
+.palco-ponto:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+.palco-ponto--atual {
+  width: 22px;
+  background: linear-gradient(90deg, var(--camada-abertura, #8b7bf0), var(--camada-ide, #38bdf8));
 }
 </style>
 
@@ -201,9 +335,9 @@ function aoInicializarPalco() {
 <style>
 .no-apresentacao {
   transition:
-    opacity 0.4s ease,
-    transform 0.4s ease,
-    filter 0.4s ease;
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    filter 0.45s ease;
 }
 
 /* Nó atualmente em foco: totalmente visível e levemente ampliado. */
@@ -211,11 +345,103 @@ function aoInicializarPalco() {
   opacity: 1;
   filter: none;
   z-index: 5;
+  transform: scale(1.02);
 }
 
 /* Demais nós: esmaecidos para reforçar a metáfora de slide. */
 .no-esmaecido {
-  opacity: 0.45;
-  filter: saturate(0.7);
+  opacity: 0.4;
+  filter: saturate(0.65) brightness(0.9);
+}
+
+/*
+  Cores por CAMADA aplicadas via classe do nó (definida pelo motor).
+  Cada classe injeta as variáveis --cor/--cor-forte consumidas pelos
+  cartões (NoCapa/NoAssunto/NoDetalhe).
+*/
+.camada-abertura {
+  --cor: var(--camada-abertura);
+  --cor-forte: var(--camada-abertura-forte);
+}
+.camada-ide {
+  --cor: var(--camada-ide);
+  --cor-forte: var(--camada-ide-forte);
+}
+.camada-harness {
+  --cor: var(--camada-harness);
+  --cor-forte: var(--camada-harness-forte);
+}
+.camada-recurso {
+  --cor: var(--camada-recurso);
+  --cor-forte: var(--camada-recurso-forte);
+}
+.camada-superficie {
+  --cor: var(--camada-superficie);
+  --cor-forte: var(--camada-superficie-forte);
+}
+
+/*
+  As variáveis acima ficam no wrapper .vue-flow__node; propagamos para o
+  cartão interno (que define seu próprio fallback de cor). Como os cartões
+  usam var(--cor), a herança de custom properties já cobre o caso.
+*/
+.camada-abertura .cartao-capa,
+.camada-abertura .cartao-assunto,
+.camada-abertura .cartao-detalhe,
+.camada-ide .cartao-capa,
+.camada-ide .cartao-assunto,
+.camada-ide .cartao-detalhe,
+.camada-harness .cartao-capa,
+.camada-harness .cartao-assunto,
+.camada-harness .cartao-detalhe,
+.camada-recurso .cartao-capa,
+.camada-recurso .cartao-assunto,
+.camada-recurso .cartao-detalhe,
+.camada-superficie .cartao-capa,
+.camada-superficie .cartao-assunto,
+.camada-superficie .cartao-detalhe {
+  --cor: inherit;
+  --cor-forte: inherit;
+}
+
+/*
+  Animação de entrada dos detalhes (subnós) quando o assunto pai entra em
+  foco. O Vue Flow controla a visibilidade via `hidden`; ao reaparecer, o
+  nó desliza suavemente para o lugar.
+*/
+.vue-flow__node[data-id^="ide-d-"],
+.vue-flow__node .cartao-detalhe {
+  animation: surgir-detalhe 0.45s ease both;
+}
+
+@keyframes surgir-detalhe {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Arestas do fluxo principal com a cor de destaque da apresentação. */
+.vue-flow__edge-path,
+.aresta-apresentacao .vue-flow__edge-path {
+  stroke: rgba(139, 123, 240, 0.55);
+  stroke-width: 2;
+}
+
+.vue-flow__edge.animated .vue-flow__edge-path {
+  stroke: rgba(56, 189, 248, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vue-flow__node .cartao-detalhe {
+    animation: none;
+  }
+  .no-atual {
+    transform: none;
+  }
 }
 </style>

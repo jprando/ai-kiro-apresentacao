@@ -13,7 +13,7 @@
 
 import { useVueFlow } from '@vue-flow/core'
 import type { Edge, Node } from '@vue-flow/core'
-import type { Apresentacao, Slide } from '~/tipos/apresentacao'
+import type { Apresentacao, CamadaVisual, Slide } from '~/tipos/apresentacao'
 import { apresentacaoKiro } from '~/dados/slides'
 
 /** Duração padrão (ms) das animações de câmera entre nós. */
@@ -21,6 +21,48 @@ const DURACAO_ANIMACAO = 700
 
 /** Zoom aplicado ao focar um assunto/slide individual. */
 const ZOOM_FOCO = 1.15
+
+/**
+ * Classifica cada slide em uma "camada visual" para colorir os cartões de
+ * forma coerente (infográfico). A camada é derivada do id/tipo do slide,
+ * evitando repetir a cor em cada um dos 27 slides do arquivo de dados.
+ *
+ * Camadas:
+ * - 'abertura'   : capa, agenda, overview e encerramento (neutro/roxo base)
+ * - 'ide'        : o bloco do Kiro IDE (história, modelos, effort, linguagens)
+ * - 'harness'    : conceito de harness e o harness do Kiro
+ * - 'recurso'    : os recursos do .kiro (specs, steering, hooks, permissions...)
+ * - 'superficie' : as demais superfícies (CLI, Web, Mobile, Crew)
+ */
+function classificarCamada(slide: Slide): CamadaVisual {
+  const id = slide.id
+  const pai = slide.paiId ?? ''
+
+  if (id.startsWith('superficie') || pai.startsWith('superficie')) {
+    return 'superficie'
+  }
+  if (
+    id.startsWith('harness') ||
+    id.startsWith('harn-') ||
+    id.startsWith('hk-') ||
+    pai.startsWith('harness')
+  ) {
+    return 'harness'
+  }
+  if (
+    id.startsWith('recurso-') ||
+    id.startsWith('kiro-global') ||
+    id.startsWith('kiro-projeto') ||
+    pai.startsWith('recurso-') ||
+    pai.startsWith('kiro-')
+  ) {
+    return 'recurso'
+  }
+  if (id.startsWith('ide') || pai.startsWith('ide') || id.startsWith('hist-')) {
+    return 'ide'
+  }
+  return 'abertura'
+}
 
 export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
   // A instância do Vue Flow é identificada por um id fixo, compartilhado com
@@ -81,6 +123,7 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
       const ehDetalhe = slide.tipo === 'detalhe'
       const visivel = !ehDetalhe || detalhesVisiveis.value.has(slide.id)
       const ehAtual = slide.id === idAtual.value
+      const camada = classificarCamada(slide)
 
       return {
         id: slide.id,
@@ -88,15 +131,18 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
         position: slide.posicao,
         // `hidden` recolhe os detalhes que não pertencem ao assunto em foco.
         hidden: !visivel,
-        // Classes CSS controlam destaque/esmaecimento (transições no CSS).
+        // Classes CSS controlam destaque/esmaecimento e a cor por camada
+        // (transições declaradas no CSS não escopado do palco).
         class: [
           'no-apresentacao',
+          `camada-${camada}`,
           ehAtual ? 'no-atual' : 'no-esmaecido'
         ].join(' '),
         data: {
           titulo: slide.titulo,
           conteudo: slide.conteudo,
           tipo: slide.tipo,
+          camada,
           atual: ehAtual
         },
         // Detalhes ficam sob o assunto (não recebem novas conexões manuais).
