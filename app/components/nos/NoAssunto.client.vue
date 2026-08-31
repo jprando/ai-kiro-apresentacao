@@ -37,12 +37,9 @@ const rotuloCamada = computed(() => {
 
 <template>
   <div class="cartao-assunto" :class="[data.atual && 'cartao-assunto--atual']">
-    <!-- Ilustração conceitual de fundo ("big image" do assunto), atrás do texto. -->
-    <IlustracaoFundo :chave="data.conteudo?.ilustracao" :camada="data.camada" />
-
     <Handle id="fluxo-entrada" type="target" :position="Position.Left" :connectable="false" />
 
-    <!-- Conteúdo textual acima da ilustração (camada de leitura). -->
+    <!-- Agrupador do conteúdo textual do cartão (a "big image" agora é o wallpaper do palco). -->
     <div class="cartao-conteudo">
     <div class="cartao-cabecalho">
       <div class="cartao-icone-aro">
@@ -111,12 +108,6 @@ const rotuloCamada = computed(() => {
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cor-forte) 55%, transparent),
     0 26px 55px -22px color-mix(in srgb, var(--cor) 55%, black);
-}
-
-/* Camada de leitura: fica acima da ilustração de fundo para garantir contraste. */
-.cartao-conteudo {
-  position: relative;
-  z-index: 2;
 }
 
 .cartao-cabecalho {

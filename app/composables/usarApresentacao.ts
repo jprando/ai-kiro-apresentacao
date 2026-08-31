@@ -184,14 +184,6 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
       const ehAtual = slide.id === idAtual.value
       const camada = classificarCamada(slide)
 
-      // Ilustração de fundo: o assunto usa a própria chave; o detalhe HERDA a
-      // chave do assunto pai (renderizada de forma mais esmaecida pelo NoDetalhe),
-      // reforçando que o detalhe "pertence" ao assunto — sem inventar dezenas de
-      // desenhos novos. Se o pai não tiver ilustração, o detalhe fica sem fundo.
-      const ilustracao = ehDetalhe && slide.paiId
-        ? mapaSlides.value.get(slide.paiId)?.conteudo?.ilustracao
-        : slide.conteudo?.ilustracao
-
       return {
         id: slide.id,
         type: slide.tipo,
@@ -210,9 +202,7 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
           conteudo: slide.conteudo,
           tipo: slide.tipo,
           camada,
-          atual: ehAtual,
-          // Chave da ilustração de fundo já resolvida (própria ou herdada do pai).
-          ilustracao
+          atual: ehAtual
         },
         // Detalhes ficam sob o assunto (não recebem novas conexões manuais).
         draggable: false,

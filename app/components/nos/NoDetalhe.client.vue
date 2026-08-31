@@ -1,7 +1,7 @@
 <!-- app/components/nos/NoDetalhe.client.vue — Nó de detalhamento de um assunto (subnó 'detalhe'). -->
-<!-- Revelado com animação quando o assunto pai está em foco. Renderiza a ilustração de fundo -->
-<!-- HERDADA do assunto pai (chave resolvida no composable e recebida via data.ilustracao), bem -->
-<!-- mais esmaecida que nos cartões maiores, para não competir com o texto do cartão de 228px. -->
+<!-- Revelado com animação quando o assunto pai está em foco. Cartão compacto (228px) só com -->
+<!-- texto; a "big image" do slide agora é o wallpaper do palco (composable wallpaperAtual), -->
+<!-- que herda a imagem/chave do assunto pai — o detalhe não desenha mais ilustração interna. -->
 
 <script setup lang="ts">
 import { Handle, Position } from '@vue-flow/core'
@@ -14,20 +14,15 @@ defineProps<{
     tipo: TipoSlide
     camada: CamadaVisual
     atual: boolean
-    /** Chave da ilustração de fundo (herdada do assunto pai) resolvida pelo motor. */
-    ilustracao?: string
   }
 }>()
 </script>
 
 <template>
   <div class="cartao-detalhe" :class="[data.atual && 'cartao-detalhe--atual']">
-    <!-- Ilustração de fundo herdada do assunto pai (marca d'água bem discreta). -->
-    <IlustracaoFundo class="ilustracao-detalhe" :chave="data.ilustracao" :camada="data.camada" />
-
     <Handle id="detalhe-entrada" type="target" :position="Position.Top" :connectable="false" />
 
-    <!-- Conteúdo textual acima da ilustração (camada de leitura). -->
+    <!-- Agrupador do conteúdo textual do cartão (a "big image" agora é o wallpaper do palco). -->
     <div class="cartao-conteudo">
       <div class="cartao-cabecalho">
         <div class="cartao-icone-aro">
@@ -68,27 +63,6 @@ defineProps<{
     transform 0.35s ease,
     box-shadow 0.35s ease,
     border-color 0.35s ease;
-}
-
-/* Camada de leitura: acima da ilustração de fundo para garantir contraste. */
-.cartao-conteudo {
-  position: relative;
-  z-index: 2;
-}
-
-/*
-  O cartão de detalhe é pequeno (228px): a ilustração herdada do pai precisa
-  ser AINDA MAIS discreta que nos cartões maiores para não competir com o texto.
-  Reduzimos a opacidade do desenho e reforçamos o overlay escuro (as classes
-  internas do componente filho são atingidas via :deep, pois lá o CSS é scoped).
-*/
-.ilustracao-detalhe :deep(.ilustracao-svg) {
-  opacity: 0.08;
-}
-
-.ilustracao-detalhe :deep(.ilustracao-overlay) {
-  background:
-    radial-gradient(120% 90% at 50% 40%, rgba(13, 18, 32, 0.55), rgba(13, 18, 32, 0.82) 85%);
 }
 
 .cartao-detalhe--atual {

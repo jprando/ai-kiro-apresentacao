@@ -30,13 +30,10 @@ const rotuloTipo = computed(() => {
 
 <template>
   <div class="cartao-capa" :class="[data.atual && 'cartao-capa--atual']">
-    <!-- Ilustração conceitual de fundo ("big image" do slide), atrás do texto. -->
-    <IlustracaoFundo :chave="data.conteudo?.ilustracao" :camada="data.camada" />
-
     <!-- Conectores de entrada/saída da metáfora de fluxo do Vue Flow. -->
     <Handle id="fluxo-entrada" type="target" :position="Position.Left" :connectable="false" />
 
-    <!-- Conteúdo textual acima da ilustração (camada de leitura). -->
+    <!-- Agrupador do conteúdo textual do cartão (a "big image" agora é o wallpaper do palco). -->
     <div class="cartao-conteudo">
       <span class="cartao-badge">{{ rotuloTipo }}</span>
 
@@ -103,12 +100,6 @@ const rotuloTipo = computed(() => {
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cor-forte) 55%, transparent),
     0 28px 60px -22px color-mix(in srgb, var(--cor) 60%, black);
-}
-
-/* Camada de leitura: fica acima da ilustração de fundo para garantir contraste. */
-.cartao-conteudo {
-  position: relative;
-  z-index: 2;
 }
 
 .cartao-badge {
