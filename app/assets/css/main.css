@@ -14,7 +14,8 @@
   Todos os nomes e comentários em pt-BR (steering IDIOMA).
 */
 :root {
-  /* Tipografia (fontes carregadas via @nuxt/fonts). */
+  /* Tipografia (fontes self-hosted em public/fonts/, resolvidas pelo provedor
+     local do @nuxt/fonts — sem fetch externo). */
   --fonte-titulo: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif;
   --fonte-texto: "Inter", ui-sans-serif, system-ui, sans-serif;
 

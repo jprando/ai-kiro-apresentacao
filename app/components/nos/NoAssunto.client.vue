@@ -37,7 +37,7 @@ const rotuloCamada = computed(() => {
 
 <template>
   <div class="cartao-assunto" :class="[data.atual && 'cartao-assunto--atual']">
-    <Handle type="target" :position="Position.Left" />
+    <Handle id="fluxo-entrada" type="target" :position="Position.Left" :connectable="false" />
 
     <div class="cartao-cabecalho">
       <div class="cartao-icone-aro">
@@ -70,9 +70,9 @@ const rotuloCamada = computed(() => {
       </li>
     </ul>
 
-    <Handle type="source" :position="Position.Right" />
+    <Handle id="fluxo-saida" type="source" :position="Position.Right" :connectable="false" />
     <!-- Conector inferior para os detalhes (subnós). -->
-    <Handle id="detalhes" type="source" :position="Position.Bottom" />
+    <Handle id="detalhes" type="source" :position="Position.Bottom" :connectable="false" />
   </div>
 </template>
 

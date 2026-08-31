@@ -153,8 +153,19 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
   )
 
   /**
-   * Arestas no formato do Vue Flow. Arestas que ligam um assunto aos seus
-   * detalhes só aparecem quando os detalhes estão visíveis.
+   * Arestas no formato do Vue Flow.
+   *
+   * Duas famílias:
+   * - assunto -> detalhe: só aparecem quando os detalhes do assunto em foco
+   *   estão visíveis (ligadas do handle inferior "detalhes" ao topo do detalhe);
+   * - fluxo principal (assunto -> assunto): sempre existem, mas apenas a
+   *   aresta que TOCA o nó atual fica em destaque; as demais são esmaecidas.
+   *
+   * O esmaecimento das arestas de fluxo que não tocam o nó atual evita o efeito
+   * de "linhas que se conectam a nada" quando a câmera dá zoom em um único nó —
+   * os vizinhos ficam fora do viewport e suas linhas cruzavam a tela rumo ao
+   * vazio. É o análogo, para arestas, do esmaecimento já aplicado aos nós
+   * (`no-atual` / `no-esmaecido`).
    */
   const arestas = computed<Edge[]>(() =>
     dados.arestas
@@ -165,13 +176,33 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
         }
         return true
       })
-      .map((aresta) => ({
-        id: aresta.id,
-        source: aresta.origem,
-        target: aresta.destino,
-        animated: aresta.animada ?? false,
-        class: 'aresta-apresentacao'
-      }))
+      .map((aresta) => {
+        const destino = mapaSlides.value.get(aresta.destino)
+        const ehArestaDetalhe = destino?.tipo === 'detalhe'
+        // Uma aresta de fluxo está "ativa" quando conecta o nó atual a um vizinho.
+        const tocaAtual =
+          aresta.origem === idAtual.value || aresta.destino === idAtual.value
+
+        const classes = ['aresta-apresentacao']
+        if (ehArestaDetalhe) {
+          classes.push('aresta-detalhe')
+        } else {
+          classes.push(tocaAtual ? 'aresta-fluxo-ativa' : 'aresta-fluxo-esmaecida')
+        }
+
+        return {
+          id: aresta.id,
+          source: aresta.origem,
+          target: aresta.destino,
+          // Handles explícitos garantem curvas coerentes: o fluxo horizontal
+          // sai pela direita e entra pela esquerda; o detalhe desce do handle
+          // inferior do assunto para o topo do subnó.
+          sourceHandle: ehArestaDetalhe ? 'detalhes' : 'fluxo-saida',
+          targetHandle: ehArestaDetalhe ? 'detalhe-entrada' : 'fluxo-entrada',
+          animated: (aresta.animada ?? false) && (ehArestaDetalhe || tocaAtual),
+          class: classes.join(' ')
+        }
+      })
   )
 
   /**
