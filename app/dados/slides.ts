@@ -5,7 +5,7 @@
 // specs, steering, hooks, mcp, skills, powers, checkpoints, permissions,
 // custom-agents, guides_languages-and-frameworks, doc_cli/web/mobile/crew).
 // Os textos foram traduzidos/adaptados para tom conciso de slide, sem inventar
-// funcionalidades. O foco é APROFUNDADO no Kiro IDE; as demais superfícies
+// funcionalidades. O foco é APROFUNDADO no Kiro IDE; as demais opções
 // (CLI, Web, Mobile, Crew) aparecem de forma breve.
 //
 // Público-alvo misto endereçado nos textos:
@@ -106,7 +106,7 @@ export const apresentacaoKiro: Apresentacao = {
           'Harness: o que é e como o Kiro organiza tudo',
           '.kiro global e por projeto: Specs, Steering, Hooks, MCP, Skills, Powers, Checkpoints, Permissions, Custom Agents',
           'Suporte a linguagens',
-          'As demais superfícies, em resumo'
+          'As demais opções em resumo'
         ]
       }
     },

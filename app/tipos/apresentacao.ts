@@ -24,7 +24,7 @@ export type TipoSlide = 'capa' | 'agenda' | 'overview' | 'assunto' | 'detalhe'
  * - 'ide'        : o bloco aprofundado do Kiro IDE
  * - 'harness'    : o conceito de harness e o harness do Kiro
  * - 'recurso'    : os recursos do .kiro (specs, steering, hooks, etc.)
- * - 'superficie' : as demais superfícies (CLI, Web, Mobile, Crew)
+ * - 'superficie' : as demais opções (CLI, Web, Mobile, Crew)
  */
 export type CamadaVisual =
   | 'abertura'

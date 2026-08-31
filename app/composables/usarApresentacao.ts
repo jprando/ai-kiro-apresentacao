@@ -35,6 +35,13 @@ const DURACAO_ANIMACAO = 700
 const ZOOM_FOCO = 1.15
 
 /**
+ * Deslocamento vertical (px de tela) aplicado ao focar um assunto que tem
+ * subnós visíveis: sobe o cartão principal na tela para dar espaço aos
+ * subnós logo abaixo. Positivo = sobe o cartão (câmera mira mais abaixo).
+ */
+const DESLOCAMENTO_VERTICAL_SUBNOS = 130
+
+/**
  * Classifica cada slide em uma "camada visual" para colorir os cartões de
  * forma coerente (infográfico). A camada é derivada do id/tipo do slide,
  * evitando repetir a cor em cada um dos 27 slides do arquivo de dados.
@@ -44,7 +51,7 @@ const ZOOM_FOCO = 1.15
  * - 'ide'        : o bloco do Kiro IDE (história, modelos, effort, linguagens)
  * - 'harness'    : conceito de harness e o harness do Kiro
  * - 'recurso'    : os recursos do .kiro (specs, steering, hooks, permissions...)
- * - 'superficie' : as demais superfícies (CLI, Web, Mobile, Crew)
+ * - 'superficie' : as demais opções (CLI, Web, Mobile, Crew)
  */
 function classificarCamada(slide: Slide): CamadaVisual {
   const id = slide.id
@@ -195,6 +202,21 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
       const ehAtual = slide.id === idAtual.value
       const camada = classificarCamada(slide)
 
+      // Um detalhe (subnó) só fica visível quando o assunto pai está em foco
+      // (ou quando ele mesmo é o slide atual). Nesse estado ele pertence ao
+      // "slide" atual e NÃO deve ser esmaecido — do contrário o wrapper
+      // `.vue-flow__node` recebe opacity 0.4 e o cartão inteiro fica
+      // translúcido (deixando o fundo do palco vazar, mesmo com fundo sólido).
+      // Usa classe própria (não `no-atual`) para ficar 100% opaco SEM herdar o
+      // realce de destaque do pai (scale/z-index). Só os assuntos vizinhos
+      // fora de foco devem esmaecer.
+      const ehDetalheEmFoco = ehDetalhe && visivel && !ehAtual
+      const classeEstado = ehAtual
+        ? 'no-atual'
+        : ehDetalheEmFoco
+          ? 'no-detalhe-ativo'
+          : 'no-esmaecido'
+
       return {
         id: slide.id,
         type: slide.tipo,
@@ -206,7 +228,7 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
         class: [
           'no-apresentacao',
           `camada-${camada}`,
-          ehAtual ? 'no-atual' : 'no-esmaecido'
+          classeEstado
         ].join(' '),
         data: {
           titulo: slide.titulo,
@@ -290,7 +312,19 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
       const largura = no.dimensions?.width ?? 0
       const altura = no.dimensions?.height ?? 0
       const centroX = no.position.x + largura / 2
-      const centroY = no.position.y + altura / 2
+      let centroY = no.position.y + altura / 2
+
+      // Quando o assunto em foco tem subnós (detalhes) revelados logo abaixo,
+      // sobe o cartão na tela para dar espaço/visibilidade aos subnós. Fazemos
+      // isso descendo o ALVO da câmera (centroY maior) — o Vue Flow centraliza
+      // esse ponto, então o cartão aparece acima do centro. O deslocamento é
+      // dado em px de tela e convertido para coordenadas de mundo (÷ zoom).
+      const temSubnosVisiveis = (mapaSlides.value.get(id)?.subnos ?? [])
+        .some((subId) => detalhesVisiveis.value.has(subId))
+      if (temSubnosVisiveis) {
+        centroY += DESLOCAMENTO_VERTICAL_SUBNOS / ZOOM_FOCO
+      }
+
       await setCenter(centroX, centroY, {
         zoom: ZOOM_FOCO,
         duration: DURACAO_ANIMACAO

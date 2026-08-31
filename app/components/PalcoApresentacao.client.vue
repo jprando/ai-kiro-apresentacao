@@ -481,6 +481,17 @@ function aoInicializarPalco() {
   transform: scale(1.02);
 }
 
+/*
+  Subnó (detalhe) do assunto em foco: totalmente opaco e sem esmaecimento,
+  mas SEM o realce de destaque do pai (sem scale/z-index elevado). Sem esta
+  classe os subnós caíam em `.no-esmaecido` (opacity 0.4), deixando o cartão
+  inteiro translúcido — o fundo do palco vazava mesmo com fundo sólido.
+*/
+.no-detalhe-ativo {
+  opacity: 1;
+  filter: none;
+}
+
 /* Demais nós: esmaecidos para reforçar a metáfora de slide. */
 .no-esmaecido {
   opacity: 0.4;

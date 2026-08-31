@@ -56,21 +56,20 @@ defineProps<{
   border-radius: 0.85rem;
   font-family: var(--fonte-texto);
   color: #eef1fb;
-  /* Glassmorphism: fundo escuro semitransparente deixa o wallpaper do palco
-     transparecer DESFOCADO por tras. O gradiente translucido preserva a
-     identidade elegante; a opacidade em ~0.5 (vidro fosco, nao transparente)
-     mantem o texto legivel mesmo sobre wallpapers claros/movimentados. */
-  background-color: rgba(15, 21, 38, 0.5);
-  background-image: linear-gradient(160deg, rgba(20, 27, 46, 0.55), rgba(11, 16, 32, 0.42));
-  /* Borda clara sutil realca o "vidro", combinando com a cor da camada. */
-  border: 1px solid color-mix(in srgb, var(--cor-forte) 25%, rgba(255, 255, 255, 0.2));
-  /* Blur forte + saturate dao o material de vidro fosco desfocando o fundo. */
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  /* Sombra de profundidade + realce claro interno no topo (brilho de vidro). */
+  /* Fundo SOLIDO opaco, no mesmo padrao do NoAssunto (cartao pai). Sem
+     transparencia nem backdrop-filter: dentro do `.vue-flow__viewport` (que
+     tem `transform`) o blur nao alcanca o wallpaper do palco, e a
+     transparencia deixava o conteudo de tras vazar de forma indesejada.
+     O "vidro" foi abandonado a pedido — cartao opaco e legivel. */
+  background:
+    radial-gradient(130% 80% at 0% 0%, color-mix(in srgb, var(--cor) 18%, transparent), transparent 65%),
+    linear-gradient(160deg, #172038, #0d1322);
+  /* Borda sutil na cor da camada. */
+  border: 1px solid color-mix(in srgb, var(--cor-forte) 30%, rgba(255, 255, 255, 0.18));
+  /* Sombra de profundidade + realce claro interno no topo. */
   box-shadow:
-    0 16px 40px -18px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    0 16px 40px -18px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease,
@@ -78,8 +77,7 @@ defineProps<{
 }
 
 .cartao-detalhe--atual {
-  /* Em foco, borda e realce de vidro ficam um pouco mais fortes; o inset
-     highlight no topo e reforcado para manter o toque glass mais evidente. */
+  /* Em foco, borda e sombra ficam um pouco mais fortes para destacar o cartao. */
   border-color: color-mix(in srgb, var(--cor-forte) 45%, rgba(255, 255, 255, 0.28));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cor-forte) 50%, transparent),
