@@ -1,44 +1,15 @@
 <script setup lang="ts">
-// Página inicial (placeholder de validação da integração Vue Flow).
-// O conteúdo real da apresentação virá em features seguintes.
+// Página inicial: renderiza o palco da apresentação.
 //
-// Padrão obrigatório: o VueFlow acessa `window`/`document`, portanto
-// deve ser renderizado somente no cliente, dentro de <ClientOnly>.
+// O VueFlow acessa `window`/`document`, portanto o palco é um componente
+// .client renderizado somente no cliente, dentro de <ClientOnly>.
 // Ver docs do Vue Flow: https://vueflow.dev/
-
-import type { Edge, Node } from '@vue-flow/core'
-
-// Dois nós de teste apenas para validar que a integração compila e roda.
-const nos = ref<Node[]>([
-  {
-    id: '1',
-    type: 'input',
-    position: { x: 100, y: 100 },
-    data: { label: 'Kiro IDE' }
-  },
-  {
-    id: '2',
-    type: 'output',
-    position: { x: 100, y: 260 },
-    data: { label: 'Recursos' }
-  }
-])
-
-const arestas = ref<Edge[]>([
-  {
-    id: 'e1-2',
-    source: '1',
-    target: '2',
-    animated: true
-  }
-])
 </script>
 
 <template>
   <div class="apresentacao-tela">
     <ClientOnly>
-      <!-- VueFlow e addons são carregados apenas no cliente -->
-      <VueFlowTeste :nos="nos" :arestas="arestas" />
+      <PalcoApresentacao />
       <template #fallback>
         <div class="apresentacao-carregando">
           Carregando apresentação...
