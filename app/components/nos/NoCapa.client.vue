@@ -26,6 +26,14 @@ const rotuloTipo = computed(() => {
       return 'Panorama'
   }
 })
+
+// Slides de MARCA (capa no início e encerramento no fim) carregam o logo do
+// Kiro. Neles exibimos a tag "AWS" para atrelar visualmente Kiro -> AWS (o Kiro
+// é da AWS). O critério é: título "Kiro" OU presença do logo da marca. Isso
+// exclui 'agenda' e 'overview', que usam este mesmo nó mas têm ícone (sem logo).
+const ehSlideMarca = computed(
+  () => props.data.titulo === 'Kiro' || Boolean(props.data.conteudo?.logo)
+)
 </script>
 
 <template>
@@ -52,6 +60,15 @@ const rotuloTipo = computed(() => {
     <h2 class="cartao-titulo">
       {{ data.titulo }}
     </h2>
+    <!-- Tag de marca: associa "Kiro" à "AWS" na capa e no encerramento. -->
+    <UBadge
+      v-if="ehSlideMarca"
+      label="AWS"
+      color="warning"
+      variant="subtle"
+      size="sm"
+      class="cartao-marca-aws"
+    />
     <p v-if="data.conteudo?.subtitulo" class="cartao-subtitulo">
       {{ data.conteudo.subtitulo }}
     </p>
@@ -151,6 +168,15 @@ const rotuloTipo = computed(() => {
   font-weight: 700;
   line-height: 1.1;
   margin: 0;
+}
+
+/* Tag "AWS" logo abaixo do título, centralizada, reforçando Kiro -> AWS.
+   width:fit-content + margin-inline:auto centraliza o badge (span) no cartão. */
+.cartao-marca-aws {
+  display: flex;
+  width: fit-content;
+  margin: 0.5rem auto 0;
+  letter-spacing: 0.08em;
 }
 
 .cartao-subtitulo {
