@@ -14,7 +14,7 @@
 import { useVueFlow } from '@vue-flow/core'
 import type { Edge, Node } from '@vue-flow/core'
 import type { Apresentacao, Slide } from '~/tipos/apresentacao'
-import { apresentacaoPlaceholder } from '~/dados/slidesPlaceholder'
+import { apresentacaoKiro } from '~/dados/slides'
 
 /** Duração padrão (ms) das animações de câmera entre nós. */
 const DURACAO_ANIMACAO = 700
@@ -22,7 +22,7 @@ const DURACAO_ANIMACAO = 700
 /** Zoom aplicado ao focar um assunto/slide individual. */
 const ZOOM_FOCO = 1.15
 
-export function usarApresentacao(dados: Apresentacao = apresentacaoPlaceholder) {
+export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
   // A instância do Vue Flow é identificada por um id fixo, compartilhado com
   // o componente <VueFlow :id="..."> do palco.
   const { setCenter, fitView, findNode } = useVueFlow('palco-apresentacao')

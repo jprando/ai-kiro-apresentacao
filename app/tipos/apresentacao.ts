@@ -36,6 +36,11 @@ export interface ConteudoSlide {
   icone?: string
   /** Cor de destaque opcional (classe utilitária ou token de cor). */
   cor?: string
+  /**
+   * Caminho de uma imagem/logo exibida no topo do slide (ex.: o fantasminha
+   * do Kiro na capa). Usado principalmente pelo nó de capa.
+   */
+  logo?: string
 }
 
 /**

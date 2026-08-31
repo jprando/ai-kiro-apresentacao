@@ -18,6 +18,13 @@ defineProps<{
   <div class="cartao-capa">
     <!-- Conectores de entrada/saída da metáfora de fluxo do Vue Flow. -->
     <Handle type="target" :position="Position.Left" />
+    <!-- Logo/marca visual (ex.: fantasminha do Kiro na capa). -->
+    <img
+      v-if="data.conteudo?.logo"
+      :src="data.conteudo.logo"
+      class="cartao-logo"
+      alt="Fantasminha do Kiro"
+    >
     <UIcon
       v-if="data.conteudo?.icone"
       :name="data.conteudo.icone"
@@ -50,6 +57,14 @@ defineProps<{
   background: var(--ui-bg-elevated, #1f2937);
   color: var(--ui-text, #f9fafb);
   border: 2px solid var(--ui-border, #374151);
+}
+
+.cartao-logo {
+  width: 72px;
+  height: 84px;
+  margin: 0 auto 0.5rem;
+  display: block;
+  filter: drop-shadow(0 6px 12px rgba(99, 102, 241, 0.35));
 }
 
 .cartao-icone {
