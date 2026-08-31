@@ -84,9 +84,9 @@ export const apresentacaoKiro: Apresentacao = {
       conteudo: {
         logo: '/kiro-fantasminha.svg',
         ilustracao: 'fantasminha-portas',
-        subtitulo: 'Um agente, todas as superfícies',
+        subtitulo: 'Um agente muitas opções',
         descricao:
-          'Uma jornada visual pelos recursos do Kiro IDE — o ambiente de desenvolvimento com IA que mantém você no controle.'
+          'Uma jornada pelos recursos do Kiro IDE — o ambiente de desenvolvimento com IA que mantém você no controle.'
       }
     },
 
@@ -1025,13 +1025,13 @@ export const apresentacaoKiro: Apresentacao = {
     // ======================= 5. DEMAIS SUPERFÍCIES (breve) =======================
     {
       id: 'superficies',
-      titulo: 'Demais superfícies',
+      titulo: 'Demais opções',
       tipo: 'overview',
       posicao: { x: coluna(21), y: LINHA_ASSUNTOS },
       conteudo: {
         icone: 'i-lucide-panels-top-left',
         ilustracao: 'agente-portas',
-        subtitulo: 'Rápido: só para você saber que existem',
+        subtitulo: 'só para você saber que existem',
         descricao:
           'O mesmo agente, em outras portas de entrada. Aqui, apenas os destaques de cada uma.'
       }
@@ -1108,15 +1108,15 @@ export const apresentacaoKiro: Apresentacao = {
     // ======================= ENCERRAMENTO =======================
     {
       id: 'encerramento',
-      titulo: 'Obrigado!',
+      titulo: 'Kiro',
       tipo: 'capa',
       posicao: { x: coluna(26), y: LINHA_ASSUNTOS },
       conteudo: {
         logo: '/kiro-fantasminha.svg',
         ilustracao: 'fantasminha-portas',
-        subtitulo: 'Um agente, todas as superfícies',
+        subtitulo: 'Um agente muitas opções',
         descricao:
-          'Kiro coloca você no controle: specs para planejar, steering para padronizar, permissions para autorizar e checkpoints para voltar atrás. Bom código!'
+          'Kiro coloca você no controle: specs para planejar, steering para padronizar, permissions para autorizar e checkpoints para voltar atrás.'
       }
     }
   ],

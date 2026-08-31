@@ -28,7 +28,7 @@ const rotuloCamada = computed(() => {
     case 'recurso':
       return 'Recurso .kiro'
     case 'superficie':
-      return 'Superfície'
+      return 'Opção'
     default:
       return 'Assunto'
   }
