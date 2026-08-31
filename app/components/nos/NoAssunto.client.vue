@@ -37,8 +37,13 @@ const rotuloCamada = computed(() => {
 
 <template>
   <div class="cartao-assunto" :class="[data.atual && 'cartao-assunto--atual']">
+    <!-- Ilustração conceitual de fundo ("big image" do assunto), atrás do texto. -->
+    <IlustracaoFundo :chave="data.conteudo?.ilustracao" :camada="data.camada" />
+
     <Handle id="fluxo-entrada" type="target" :position="Position.Left" :connectable="false" />
 
+    <!-- Conteúdo textual acima da ilustração (camada de leitura). -->
+    <div class="cartao-conteudo">
     <div class="cartao-cabecalho">
       <div class="cartao-icone-aro">
         <UIcon
@@ -69,6 +74,7 @@ const rotuloCamada = computed(() => {
         <span>{{ topico }}</span>
       </li>
     </ul>
+    </div>
 
     <Handle id="fluxo-saida" type="source" :position="Position.Right" :connectable="false" />
     <!-- Conector inferior para os detalhes (subnós). -->
@@ -80,6 +86,8 @@ const rotuloCamada = computed(() => {
 .cartao-assunto {
   --cor: var(--camada-ide);
   --cor-forte: var(--camada-ide-forte);
+  position: relative;
+  overflow: hidden;
   width: 300px;
   padding: 1.35rem;
   border-radius: 1.1rem;
@@ -103,6 +111,12 @@ const rotuloCamada = computed(() => {
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cor-forte) 55%, transparent),
     0 26px 55px -22px color-mix(in srgb, var(--cor) 55%, black);
+}
+
+/* Camada de leitura: fica acima da ilustração de fundo para garantir contraste. */
+.cartao-conteudo {
+  position: relative;
+  z-index: 2;
 }
 
 .cartao-cabecalho {
