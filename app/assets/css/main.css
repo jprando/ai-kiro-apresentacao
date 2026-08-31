@@ -1,0 +1,3 @@
+/* Estilos globais da apresentação (Nuxt UI + Tailwind) */
+@import "tailwindcss";
+@import "@nuxt/ui";
