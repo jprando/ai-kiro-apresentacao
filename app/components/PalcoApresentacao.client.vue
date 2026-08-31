@@ -292,6 +292,9 @@ function aoInicializarPalco() {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  /* Esmaece levemente a imagem para os cards de detalhe respirarem melhor. */
+  opacity: 0.9;
+  filter: brightness(0.92) saturate(0.95);
 }
 
 /* SVG conceitual grande: contêiner que fixa --cor/--cor-forte via camada. */
@@ -309,8 +312,8 @@ function aoInicializarPalco() {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(120% 90% at 50% 45%, rgba(11, 16, 32, 0.35), rgba(11, 16, 32, 0.82) 90%),
-    linear-gradient(180deg, rgba(11, 16, 32, 0.45), rgba(19, 26, 48, 0.6));
+    radial-gradient(120% 90% at 50% 45%, rgba(11, 16, 32, 0.42), rgba(11, 16, 32, 0.88) 90%),
+    linear-gradient(180deg, rgba(11, 16, 32, 0.52), rgba(19, 26, 48, 0.66));
 }
 
 /* Crossfade curto do wallpaper na troca de slide (custo-zero: pontual). */

@@ -56,9 +56,12 @@ defineProps<{
   border-radius: 0.85rem;
   font-family: var(--fonte-texto);
   color: #eef1fb;
-  background: linear-gradient(160deg, #141b2e, #0d1220);
+  /* Fundo mais opaco/sólido para o texto contrastar melhor sobre o wallpaper do palco. */
+  background: linear-gradient(160deg, #0e1424, #080b16);
   border: 1px solid color-mix(in srgb, var(--cor) 35%, transparent);
-  box-shadow: 0 12px 28px -18px rgba(0, 0, 0, 0.7);
+  /* Leve blur separa o card do wallpaper de fundo sem pesar. */
+  backdrop-filter: blur(3px);
+  box-shadow: 0 12px 28px -18px rgba(0, 0, 0, 0.8);
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease,
