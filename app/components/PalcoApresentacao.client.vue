@@ -406,12 +406,20 @@ function aoInicializarPalco() {
 
 /*
   Animação de entrada dos detalhes (subnós) quando o assunto pai entra em
-  foco. O Vue Flow controla a visibilidade via `hidden`; ao reaparecer, o
-  nó desliza suavemente para o lugar.
+  foco. O Vue Flow controla a visibilidade via `hidden` (monta/desmonta o
+  wrapper `.vue-flow__node`); ao reaparecer, o cartão desliza suavemente.
+
+  IMPORTANTE: a animação é aplicada SOMENTE ao cartão interno (.cartao-detalhe),
+  nunca ao wrapper `.vue-flow__node`. Animar o wrapper com `fill-mode: both`
+  fazia o nó ficar preso no estado inicial (opacity: 0) em certos ciclos de
+  montagem/remoção do Vue Flow, deixando o subnó invisível enquanto as arestas
+  continuavam desenhadas. Usamos `forwards` (não `both`) para não reter o
+  estado `from`. A regra vale para TODOS os detalhes de forma uniforme — antes
+  havia um seletor frágil por id (`[data-id^="ide-d-"]`) que só afetava o
+  assunto "ide" e era a causa dos subnós invisíveis daquele slide.
 */
-.vue-flow__node[data-id^="ide-d-"],
 .vue-flow__node .cartao-detalhe {
-  animation: surgir-detalhe 0.45s ease both;
+  animation: surgir-detalhe 0.45s ease forwards;
 }
 
 @keyframes surgir-detalhe {
