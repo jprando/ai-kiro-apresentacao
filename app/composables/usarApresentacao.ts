@@ -105,8 +105,11 @@ export function usarApresentacao(dados: Apresentacao = apresentacaoKiro) {
 
   /**
    * Wallpaper (plano de fundo do palco) do slide em foco, resolvido por
-   * PRIORIDADE, sem qualquer chamada de rede (existência do PNG é build-time
-   * via urlImagemSlide -> import.meta.glob):
+   * PRIORIDADE, sem qualquer chamada de rede em runtime. A existência do PNG é
+   * resolvida em build-time pelo módulo local modules/imagens-slides.ts, que lê
+   * public/images com readdirSync e injeta o módulo virtual '#imagens-slides'
+   * com IDS_COM_IMAGEM (Set), consumido por urlImagemSlide (app/utils/imagensSlides.ts)
+   * como Set.has — sem fetch/HEAD nem I/O no cliente:
    *
    * 1. PNG do próprio slide: public/images/{idAtual}.png (assunto OU detalhe).
    * 2. Herança do pai (detalhes, que não têm chave própria):
